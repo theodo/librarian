@@ -6,6 +6,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ambient-attx4": "^0.2.8",
     "netatmo": "^1.5.0"
   }
 }
