@@ -4,7 +4,7 @@ var auth = {
   'client_id': '51dfb6ed187759329100003a',
   'client_secret': 'PRBJtOkVxpGQV5QRAXA4wccqTjZ8ho84sDQgoBWzYNsO',
   'username': 'dev@theodo.fr',
-  'password': 'XXXXXX',
+  'password': 'XXXX',
 };
 
 var api = new netatmo(auth);
@@ -33,14 +33,27 @@ api.getDevicelist(function(err, devices, modules) {
   var options =
   {
     date_begin : '' + Math.round(date_begin.getTime() / 1000, 0),
-    step_time: 100,
+    //step_time: 100,
     scale : 'max',
-    optimize : 'false',
+    //optimize : false,
     device_id: device._id,
     type : ['Noise']
   };
+
   api.getMeasure(options, function(err, measure) {
-    console.log(measure.length);
-    console.log(measure[0]);
+    var formatted_measures = {};
+    for (var i=0; i<measure.length; i++) {
+      for (var j=0; j<measure[i].value.length; j++) {
+        if (measure[i].step_time) {
+          var time = measure[i].beg_time + measure[i].step_time * j;
+        }
+        else {
+          var time = measure[i].beg_time;
+        }
+
+        formatted_measures[new Date(time * 1000)] = measure[i].value[j];
+      }
+    }
+    console.log(formatted_measures);
   });
 });
